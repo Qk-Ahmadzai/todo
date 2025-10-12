@@ -9,7 +9,10 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return response()->json(Category::all());
+        // return response()->json(Category::all());
+        $categories = Category::with('todos')->get();
+
+        return response()->json($categories);
     }
 
     public function store(Request $request)
