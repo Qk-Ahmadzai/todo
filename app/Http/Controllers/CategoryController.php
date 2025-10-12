@@ -21,7 +21,13 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-        return response()->json(Category::findOrFail($id));
+        // return response()->json(Category::findOrFail($id));
+        $category = Category::with('todos')->findOrFail($id);
+
+        return response()->json([
+            'category' => $category->name,
+            'todos' => $category->todos
+        ]);
     }
 
     public function update(Request $request, $id)
