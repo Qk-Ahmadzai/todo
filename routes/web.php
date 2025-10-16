@@ -58,7 +58,7 @@ $router->get('/', function () {
 });
 
 
-$router->group(['prefix' => 'api', 'middleware' => 'apikey'], function () use ($router) {
+$router->group(['prefix' => 'api'], function () use ($router) {
     // Categories
     $router->get('categories', 'CategoryController@index');
     $router->post('categories', 'CategoryController@store');
@@ -66,10 +66,31 @@ $router->group(['prefix' => 'api', 'middleware' => 'apikey'], function () use ($
     $router->put('categories/{id}', 'CategoryController@update');
     $router->delete('categories/{id}', 'CategoryController@destroy');
 
-    // Todos
-    $router->get('todos', 'TodoController@index');
-    $router->post('todos', 'TodoController@store');
-    $router->get('todos/{id}', 'TodoController@show');
-    $router->put('todos/{id}', 'TodoController@update');
-    $router->delete('todos/{id}', 'TodoController@destroy');
+    
+
+    
+});
+
+
+$router->group(['prefix' => 'api'], function () use ($router) {
+
+    // Public routes
+    $router->post('register', 'AuthController@register');
+    $router->post('login', 'AuthController@login');
+
+    // Protected routes
+    $router->group(['middleware' => 'auth:api'], function () use ($router) {
+        $router->get('me', 'AuthController@me');
+        $router->post('logout', 'AuthController@logout');
+        $router->post('refresh', 'AuthController@refresh');
+
+        // Todos
+        $router->get('todos', 'TodoController@index');
+        $router->post('todos', 'TodoController@store');
+        $router->get('todos/{id}', 'TodoController@show');
+        $router->put('todos/{id}', 'TodoController@update');
+        $router->delete('todos/{id}', 'TodoController@destroy');
+
+
+    });
 });

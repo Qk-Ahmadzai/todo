@@ -23,10 +23,16 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+$app->withFacades();
 
 $app->withEloquent();
+$app->configure('cors');
 
+
+$app->configure('app');
+$app->configure('jwt');
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->configure('auth');
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -59,7 +65,6 @@ $app->singleton(
 |
 */
 
-$app->configure('app');
 
 /*
 |--------------------------------------------------------------------------
@@ -72,13 +77,19 @@ $app->configure('app');
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    // App\Http\Middleware\CorsMiddleware::class
+    App\Http\Middleware\CorsMiddleware::class
+
+
+]);
 
 $app->routeMiddleware([
- //   'auth' => App\Http\Middleware\Authenticate::class,
- 'apikey' => App\Http\Middleware\ApiKeyMiddleware::class,
+      'auth' => App\Http\Middleware\Authenticate::class,
+      'jwt.auth' => Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+      'jwt.refresh' => Tymon\JWTAuth\Middleware\RefreshToken::class,
+
+    //   'apikey' => App\Http\Middleware\ApiKeyMiddleware::class,
 
 ]);
 
@@ -94,8 +105,10 @@ $app->routeMiddleware([
 */
 
 // $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+// $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
