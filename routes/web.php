@@ -15,7 +15,7 @@
 
 $router->get('/', function () {
     return response()->json([
-        'app_name' => 'Lumen Todo App',
+        'app_name' => 'Lumen Todo App add auth:api',
         'version' => '1.0.0',
         'framework' => 'Lumen 10.x (Laravel Micro Framework)',
         'description' => 'A lightweight RESTful API built with Lumen for managing todos and categories.',
@@ -90,5 +90,5 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 
 
-    
+
 });
